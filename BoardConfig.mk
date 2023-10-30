@@ -9,6 +9,8 @@ DEVICE_PATH := device/xiaomi/begonia
 
 # For building with minimal manifest
 ALLOW_MISSING_DEPENDENCIES := true
+BUILD_BROKEN_DUP_RULES := true
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
 # Architecture
 TARGET_ARCH := arm64
@@ -53,7 +55,7 @@ TARGET_COPY_OUT_VENDOR := vendor
 TARGET_USES_MKE2FS := true
 
 # Kernel
-BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 androidboot.selinux=permissive androidboot.usbconfigfs=true
+BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 androidboot.selinux=permissive androidboot.usbconfigfs=true androidboot.init_fatal_reboot_target=bootloader
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz
 BOARD_PREBUILT_DTBIMAGE_DIR := $(DEVICE_PATH)/prebuilt/dtb
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
@@ -71,6 +73,12 @@ BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --dtb_offset $(BOARD_DTB_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+
+# Kernel Binary
+TARGET_KERNEL_VERSION := 4.14
+LOCAL_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz
+PRODUCT_COPY_FILES += \
+	$(LOCAL_KERNEL):kernel
 
 # Platform
 TARGET_BOARD_PLATFORM := mt6785
@@ -99,7 +107,7 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
 # TWRP Configuration
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
 RECOVERY_SDCARD_ON_DATA := true
-TW_DEVICE_VERSION := 4
+TW_DEVICE_VERSION := shhhamik
 TW_THEME := portrait_hdpi
 TW_Y_OFFSET := 80
 TW_H_OFFSET := -80
@@ -111,10 +119,12 @@ TW_MAX_BRIGHTNESS := 2047
 TW_DEFAULT_BRIGHTNESS := 1024
 TW_EXCLUDE_APEX := true
 TW_INCLUDE_NTFS_3G := true
+TW_INCLUDE_LIBRESETPROP := true
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_REPACKTOOLS := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_CUSTOM_CPU_TEMP_PATH := /sys/devices/virtual/thermal/thermal_zone4/temp
+TW_FRAMERATE := 60
 
 # Debug flags
 TWRP_INCLUDE_LOGCAT := true
